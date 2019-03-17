@@ -6,6 +6,8 @@ Implementation of "Battleships" game in Java.
   * Multiplayer with direct IP connect.
   * Online gameplay and chat.
 
+## Dependancies:
+  * [WaifUPnP](https://fdossena.com/?p=waifupnp/index.frag)
 ## Screenshots:
 ![admiral_selection](https://user-images.githubusercontent.com/25724155/54485644-48c57700-488d-11e9-92cb-191ac6b33559.png)
 ![admiral_game_1](https://user-images.githubusercontent.com/25724155/54485645-48c57700-488d-11e9-8d55-7d3123fd19fe.png)
