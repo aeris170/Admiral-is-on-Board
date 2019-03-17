@@ -24,21 +24,21 @@ public final class ReadyButton extends CustomButton {
 			final Player player = Player.Player1;
 			final Player enemy = Player.Player2;
 
-			if(player.hasPlacedAllShips()) {
+			if (player.hasPlacedAllShips()) {
 				player.markReady();
-				if(game.getServerGUI() != null) {
+				if (game.getServerGUI() != null) {
 					game.getServerGUI().getAutoClient().getClient().sendBoolean(true);
-				} else if(game.getClientGUI() != null) {
+				} else if (game.getClientGUI() != null) {
 					game.getClientGUI().getClient().sendBoolean(true);
 				}
-				ready = true;
-				if(player.isReady() && enemy.isReady()) {
+				this.ready = true;
+				if (player.isReady() && enemy.isReady()) {
 					game.purgeReadyButton();
 					game.setGameState(Game.PLAYER_TURN);
 				}
 			}
 		});
-		ready = false;
+		this.ready = false;
 	}
 
 	@Override
@@ -49,17 +49,17 @@ public final class ReadyButton extends CustomButton {
 		g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		g2d.setStroke(GUIUtils.STROKE_3);
 		g2d.setColor(GUIUtils.LIGHTER_RED);
-		if(getModel().isRollover()) {
+		if (getModel().isRollover()) {
 			g2d.setColor(GUIUtils.LIGHT_RED);
 		}
-		if(getModel().isPressed()) {
-			if(ready) {
+		if (getModel().isPressed()) {
+			if (this.ready) {
 				g2d.setColor(GUIUtils.GREEN);
 			} else {
 				g2d.setColor(GUIUtils.RED);
 			}
 		}
-		if(ready) {
+		if (this.ready) {
 			g2d.setColor(GUIUtils.GREEN);
 		}
 		g2d.fillRect(0, 0, getWidth(), getHeight());

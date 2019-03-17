@@ -17,6 +17,8 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
+import com.dosse.upnp.UPnP;
+
 public final class ServerGUI extends JFrame implements ActionListener, WindowListener {
 
 	private static final long serialVersionUID = 1L;
@@ -31,28 +33,29 @@ public final class ServerGUI extends JFrame implements ActionListener, WindowLis
 
 	public ServerGUI(final int port) {
 		super("Chat Server");
-		server = new Server(port, this);
+		UPnP.openPortTCP(port);
+		this.server = new Server(port, this);
 
 		final JPanel north = new JPanel();
-		tPortNumber = new JTextField("  " + port);
-		stopStart = new JButton("Stop");
-		stopStart.addActionListener(this);
-		tPortNumber.setEditable(false);
+		this.tPortNumber = new JTextField("  " + port);
+		this.stopStart = new JButton("Stop");
+		this.stopStart.addActionListener(this);
+		this.tPortNumber.setEditable(false);
 
 		final JPanel center = new JPanel(new GridLayout(2, 1));
-		chat = new JTextArea(80, 80);
-		chat.setEditable(false);
+		this.chat = new JTextArea(80, 80);
+		this.chat.setEditable(false);
 		append("Chat room.\n");
-		event = new JTextArea(80, 80);
-		event.setEditable(false);
+		this.event = new JTextArea(80, 80);
+		this.event.setEditable(false);
 		append("Events log.\n");
 
 		north.add(new JLabel("Port number: "));
-		north.add(tPortNumber);
-		north.add(stopStart);
+		north.add(this.tPortNumber);
+		north.add(this.stopStart);
 
-		center.add(new JScrollPane(chat));
-		center.add(new JScrollPane(event));
+		center.add(new JScrollPane(this.chat));
+		center.add(new JScrollPane(this.event));
 
 		add(north, BorderLayout.NORTH);
 		add(center);
@@ -62,47 +65,47 @@ public final class ServerGUI extends JFrame implements ActionListener, WindowLis
 		setSize(400, 600);
 
 		new ServerThread().start();
-		autoClient = new ClientGUI();
-		autoClient.autoConnect(port);
+		this.autoClient = new ClientGUI();
+		this.autoClient.autoConnect(port);
 	}
 
 	public void append(final String str) {
-		chat.append(str);
-		chat.setCaretPosition(chat.getText().length() - 1);
+		this.chat.append(str);
+		this.chat.setCaretPosition(this.chat.getText().length() - 1);
 	}
 
 	@Override
 	public void actionPerformed(final ActionEvent e) {
-		if(server != null) {
-			server.stop();
-			server = null;
-			tPortNumber.setEditable(true);
-			stopStart.setText("Start");
+		if (this.server != null) {
+			this.server.stop();
+			this.server = null;
+			this.tPortNumber.setEditable(true);
+			this.stopStart.setText("Start");
 			return;
 		}
 		int port;
 		try {
-			port = Integer.parseInt(tPortNumber.getText().trim());
-		} catch(final InputMismatchException ex) {
+			port = Integer.parseInt(this.tPortNumber.getText().trim());
+		} catch (final InputMismatchException ex) {
 			append("Port closed, try an open port!");
 			ex.printStackTrace();
 			return;
 		}
-		server = new Server(port, this);
+		this.server = new Server(port, this);
 		new ServerThread().start();
-		stopStart.setText("Stop");
-		tPortNumber.setEditable(false);
+		this.stopStart.setText("Stop");
+		this.tPortNumber.setEditable(false);
 	}
 
 	public ClientGUI getAutoClient() {
-		return autoClient;
+		return this.autoClient;
 	}
 
 	@Override
 	public void windowClosing(final WindowEvent e) {
-		if(server != null) {
-			server.stop();
-			server = null;
+		if (this.server != null) {
+			this.server.stop();
+			this.server = null;
 		}
 		dispose();
 	}
@@ -131,11 +134,11 @@ public final class ServerGUI extends JFrame implements ActionListener, WindowLis
 
 		@Override
 		public void run() {
-			server.start();
-			stopStart.setText("Start");
-			tPortNumber.setEditable(true);
+			ServerGUI.this.server.start();
+			ServerGUI.this.stopStart.setText("Start");
+			ServerGUI.this.tPortNumber.setEditable(true);
 			append("Server crashed\n");
-			server = null;
+			ServerGUI.this.server = null;
 		}
 	}
 }

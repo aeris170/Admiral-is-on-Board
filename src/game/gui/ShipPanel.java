@@ -22,19 +22,19 @@ public final class ShipPanel extends JPanel {
 		super.setLocation(location);
 		super.setSize(size);
 		this.shipLength = shipLength;
-		initialLocation = location;
+		this.initialLocation = location;
 	}
 
 	public int getLength() {
-		return shipLength;
+		return this.shipLength;
 	}
 
 	public Point getInitialLocation() {
-		return initialLocation;
+		return this.initialLocation;
 	}
 
 	public boolean isVertical() {
-		return vertical;
+		return this.vertical;
 	}
 
 	public void setVertical(final boolean vertical) {
@@ -47,19 +47,21 @@ public final class ShipPanel extends JPanel {
 		final Graphics2D g2d = (Graphics2D) g;
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setStroke(GUIUtils.STROKE_5);
-		if(!vertical) {
-			for(int i = 0; i < shipLength; i++) {
+		if (!this.vertical) {
+			for (int i = 0; i < this.shipLength; i++) {
 				g2d.setColor(GUIUtils.LIGHT_GRAY.brighter());
-				g2d.drawRect((i * getWidth()) / shipLength, 0, getWidth(), getHeight());
+				g2d.drawRect((i * getWidth()) / this.shipLength, 0, getWidth(), getHeight());
 				g.setColor(GUIUtils.DARK_GREEN);
-				g.fillRect(((i * getWidth()) / shipLength) + (getWidth() / 15 / shipLength), getHeight() / 15, (13 * getWidth()) / 15 / shipLength, (13 * getHeight()) / 15);
+				g.fillRect(((i * getWidth()) / this.shipLength) + (getWidth() / 15 / this.shipLength), getHeight() / 15, (13 * getWidth()) / 15 / this.shipLength,
+				        (13 * getHeight()) / 15);
 			}
 		} else {
-			for(int i = 0; i < shipLength; i++) {
+			for (int i = 0; i < this.shipLength; i++) {
 				g2d.setColor(GUIUtils.LIGHT_GRAY.brighter());
-				g2d.drawRect(0, (i * getHeight()) / shipLength, getWidth(), getHeight());
+				g2d.drawRect(0, (i * getHeight()) / this.shipLength, getWidth(), getHeight());
 				g.setColor(GUIUtils.DARK_GREEN);
-				g.fillRect(getWidth() / 15, ((i * getHeight()) / shipLength) + (getHeight() / 15 / shipLength), (13 * getWidth()) / 15, (13 * getHeight()) / 15);
+				g.fillRect(getWidth() / 15, ((i * getHeight()) / this.shipLength) + (getHeight() / 15 / this.shipLength), (13 * getWidth()) / 15,
+				        (13 * getHeight()) / 15);
 			}
 		}
 	}

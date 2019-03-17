@@ -52,42 +52,42 @@ public final class ClientGUI extends JFrame implements ActionListener {
 
 		final JPanel northPanel = new JPanel(new GridLayout(3, 1));
 		final JPanel serverAndPort = new JPanel(new GridLayout(1, 5, 1, 10));
-		tfServer = new JTextField("");
-		tfServer.setCaretColor(GUIUtils.WHITE);
-		tfServer.setBorder(GUIUtils.LIGHT_BLUE_BORDER);
-		tfPort = new JTextField("");
-		tfPort.setCaretColor(GUIUtils.WHITE);
-		tfPort.setBorder(GUIUtils.LIGHT_BLUE_BORDER);
-		tfPort.setHorizontalAlignment(SwingConstants.RIGHT);
+		this.tfServer = new JTextField("");
+		this.tfServer.setCaretColor(GUIUtils.WHITE);
+		this.tfServer.setBorder(GUIUtils.LIGHT_BLUE_BORDER);
+		this.tfPort = new JTextField("");
+		this.tfPort.setCaretColor(GUIUtils.WHITE);
+		this.tfPort.setBorder(GUIUtils.LIGHT_BLUE_BORDER);
+		this.tfPort.setHorizontalAlignment(SwingConstants.RIGHT);
 
 		serverAndPort.add(new JLabel("Server Address: "));
-		serverAndPort.add(tfServer);
+		serverAndPort.add(this.tfServer);
 		serverAndPort.add(new JLabel(""));
 		serverAndPort.add(new JLabel("Port Number: "));
-		serverAndPort.add(tfPort);
+		serverAndPort.add(this.tfPort);
 		serverAndPort.add(new JLabel(""));
 		northPanel.add(serverAndPort);
 
-		label = new JLabel("Enter your username below (DEFAULT guest)", SwingConstants.CENTER);
-		northPanel.add(label);
-		tf = new JTextField("guest");
-		tf.setBackground(Color.WHITE);
-		tf.setCaretColor(GUIUtils.WHITE);
-		tf.setBorder(GUIUtils.LIGHT_BLUE_BORDER);
-		northPanel.add(tf);
+		this.label = new JLabel("Enter your username below (DEFAULT guest)", SwingConstants.CENTER);
+		northPanel.add(this.label);
+		this.tf = new JTextField("guest");
+		this.tf.setBackground(Color.WHITE);
+		this.tf.setCaretColor(GUIUtils.WHITE);
+		this.tf.setBorder(GUIUtils.LIGHT_BLUE_BORDER);
+		northPanel.add(this.tf);
 		add(northPanel, BorderLayout.NORTH);
 
-		ta = new JTextArea("", 80, 80);
+		this.ta = new JTextArea("", 80, 80);
 		final JPanel centerPanel = new JPanel(new GridLayout(1, 1));
-		final JScrollPane sp = new JScrollPane(ta, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		final JScrollPane sp = new JScrollPane(this.ta, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		sp.setBorder(GUIUtils.LIGHT_BLUE_BORDER_2);
 		sp.getVerticalScrollBar().setUI(new ScrollBarUI());
 		sp.getHorizontalScrollBar().setUI(new ScrollBarUI());
 		centerPanel.add(sp);
-		ta.setEditable(false);
+		this.ta.setEditable(false);
 		add(centerPanel, BorderLayout.CENTER);
 
-		login = new JButton("Connect") {
+		this.login = new JButton("Connect") {
 
 			private static final long serialVersionUID = -4808194362293478299L;
 
@@ -109,13 +109,13 @@ public final class ClientGUI extends JFrame implements ActionListener {
 				g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 				g2d.setStroke(GUIUtils.STROKE_0);
 				g2d.setColor(GUIUtils.LIGHTER_RED);
-				if(getModel().isRollover()) {
+				if (getModel().isRollover()) {
 					g2d.setColor(GUIUtils.LIGHT_RED);
 				}
-				if(getModel().isPressed()) {
+				if (getModel().isPressed()) {
 					g2d.setColor(GUIUtils.RED);
 				}
-				if(!getModel().isEnabled()) {
+				if (!getModel().isEnabled()) {
 					g2d.setColor(GUIUtils.GRAY);
 				}
 				g2d.fillRect(0, 0, getWidth(), getHeight());
@@ -126,9 +126,9 @@ public final class ClientGUI extends JFrame implements ActionListener {
 				g2d.drawString("CONNECT", 8, 18);
 			}
 		};
-		login.addActionListener(this);
+		this.login.addActionListener(this);
 
-		logout = new JButton("Disconnect") {
+		this.logout = new JButton("Disconnect") {
 
 			private static final long serialVersionUID = -4808194362293478299L;
 
@@ -150,13 +150,13 @@ public final class ClientGUI extends JFrame implements ActionListener {
 				g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 				g2d.setStroke(GUIUtils.STROKE_0);
 				g2d.setColor(GUIUtils.LIGHTER_RED);
-				if(getModel().isRollover()) {
+				if (getModel().isRollover()) {
 					g2d.setColor(GUIUtils.LIGHT_RED);
 				}
-				if(getModel().isPressed()) {
+				if (getModel().isPressed()) {
 					g2d.setColor(GUIUtils.RED);
 				}
-				if(!getModel().isEnabled()) {
+				if (!getModel().isEnabled()) {
 					g2d.setColor(GUIUtils.GRAY);
 				}
 				g2d.fillRect(0, 0, getWidth(), getHeight());
@@ -167,22 +167,22 @@ public final class ClientGUI extends JFrame implements ActionListener {
 				g2d.drawString("DISCONNECT", 5, 18);
 			}
 		};
-		logout.addActionListener(this);
+		this.logout.addActionListener(this);
 
-		logout.setEnabled(false);
+		this.logout.setEnabled(false);
 		final JPanel southPanel = new JPanel();
-		southPanel.add(login);
-		southPanel.add(logout);
+		southPanel.add(this.login);
+		southPanel.add(this.logout);
 		add(southPanel, BorderLayout.SOUTH);
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		setSize(600, 600);
 		setVisible(true);
-		tf.requestFocus();
+		this.tf.requestFocus();
 		addWindowListener(new WindowAdapter() {
 
 			@Override
 			public void windowOpened(final WindowEvent e) {
-				tfServer.requestFocus();
+				ClientGUI.this.tfServer.requestFocus();
 			}
 
 			@Override
@@ -197,62 +197,62 @@ public final class ClientGUI extends JFrame implements ActionListener {
 	}
 
 	public void append(final String str) {
-		ta.append(str);
-		ta.setCaretPosition(ta.getText().length() - 1);
+		this.ta.append(str);
+		this.ta.setCaretPosition(this.ta.getText().length() - 1);
 	}
 
 	public void connectionFailed() {
-		login.setEnabled(true);
-		logout.setEnabled(false);
-		label.setText("Enter your username below (DEFAULT guest)");
-		tf.setText("guest");
-		tfServer.setEditable(true);
-		tfPort.setEditable(true);
-		tf.removeActionListener(this);
-		connected = false;
+		this.login.setEnabled(true);
+		this.logout.setEnabled(false);
+		this.label.setText("Enter your username below (DEFAULT guest)");
+		this.tf.setText("guest");
+		this.tfServer.setEditable(true);
+		this.tfPort.setEditable(true);
+		this.tf.removeActionListener(this);
+		this.connected = false;
 	}
 
 	@Override
 	public void actionPerformed(final ActionEvent e) {
 		final Object o = e.getSource();
-		if(o == logout) {
-			client.sendDisconnect();
+		if (o == this.logout) {
+			this.client.sendDisconnect();
 			connectionFailed();
 			Game.get().setGameState(Game.CONNECT_STATE);
 			return;
 		}
-		if(connected) {
-			client.sendMessage(tf.getText());
-			tf.setText("");
+		if (this.connected) {
+			this.client.sendMessage(this.tf.getText());
+			this.tf.setText("");
 			return;
 		}
-		if(o == login) {
-			final String username = tf.getText().trim();
-			final String server = tfServer.getText().trim();
-			final String portNumber = tfPort.getText().trim();
-			if((username.length() == 0) || (server.length() == 0) || (portNumber.length() == 0)) {
+		if (o == this.login) {
+			final String username = this.tf.getText().trim();
+			final String server = this.tfServer.getText().trim();
+			final String portNumber = this.tfPort.getText().trim();
+			if ((username.length() == 0) || (server.length() == 0) || (portNumber.length() == 0)) {
 				return;
 			}
 			int port;
 			try {
 				port = Integer.parseInt(portNumber);
-			} catch(final InputMismatchException ex) {
+			} catch (final InputMismatchException ex) {
 				append("Cannot extablish connection to server. Check if your port is open!");
 				ex.printStackTrace();
 				return;
 			}
-			client = new Client(server, port, username, this);
-			if(client.start()) {
-				tf.setText("");
-				tfPort.setText("" + port);
-				label.setText("Enter your message below");
+			this.client = new Client(server, port, username, this);
+			if (this.client.start()) {
+				this.tf.setText("");
+				this.tfPort.setText("" + port);
+				this.label.setText("Enter your message below");
 				append("Connection to server established. Welcome to the Chat room.\n");
-				connected = true;
-				login.setEnabled(false);
-				logout.setEnabled(true);
-				tfServer.setEditable(false);
-				tfPort.setEditable(false);
-				tf.addActionListener(this);
+				this.connected = true;
+				this.login.setEnabled(false);
+				this.logout.setEnabled(true);
+				this.tfServer.setEditable(false);
+				this.tfPort.setEditable(false);
+				this.tf.addActionListener(this);
 				Game.get().setGameState(Game.PREPARATION_STATE);
 			}
 		}
@@ -264,27 +264,27 @@ public final class ClientGUI extends JFrame implements ActionListener {
 			final URL IPBot = new URL("http://bot.whatismyipaddress.com");
 			final BufferedReader sc = new BufferedReader(new InputStreamReader(IPBot.openStream()));
 			IPAdress = sc.readLine().trim();
-		} catch(final IOException ex) {
+		} catch (final IOException ex) {
 			ex.printStackTrace();
 			System.exit(-27);
 		}
-		client = new Client(IPAdress, port, "host", this);
-		tfServer.setText(IPAdress);
-		if(client.start()) {
-			tf.setText("");
-			tfPort.setText("" + port);
-			label.setText("Enter your message below");
-			append("Server succesfully created, waiting for clients. Welcome to the Chat room.\n");
-			connected = true;
-			login.setEnabled(false);
-			logout.setEnabled(true);
-			tfServer.setEditable(false);
-			tfPort.setEditable(false);
-			tf.addActionListener(this);
+		this.client = new Client(IPAdress, port, "host", this);
+		this.tfServer.setText(IPAdress);
+		if (this.client.start()) {
+			this.tf.setText("");
+			this.tfPort.setText("" + port);
+			this.label.setText("Enter your message below");
+			append("Server succesfully created, waiting for client. Welcome to the Chat room.\n");
+			this.connected = true;
+			this.login.setEnabled(false);
+			this.logout.setEnabled(true);
+			this.tfServer.setEditable(false);
+			this.tfPort.setEditable(false);
+			this.tf.addActionListener(this);
 		}
 	}
 
 	public Client getClient() {
-		return client;
+		return this.client;
 	}
 }

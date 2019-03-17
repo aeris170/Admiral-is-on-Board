@@ -50,73 +50,73 @@ public final class Game extends JPanel {
 	private void setUpGame() {
 		super.removeAll();
 
-		p1 = new PlayerPanel(GUIUtils.PLAYER_PANEL_POSITION, GUIUtils.PLAYER_PANEL_SIZE);
-		s7 = new ShipPanel(GUIUtils.SHIP_7_PANEL_POSITION, GUIUtils.SHIP_7_PANEL_SIZE, 5);
-		s6 = new ShipPanel(GUIUtils.SHIP_6_PANEL_POSITION, GUIUtils.SHIP_6_PANEL_SIZE, 4);
-		s5 = new ShipPanel(GUIUtils.SHIP_5_PANEL_POSITION, GUIUtils.SHIP_5_PANEL_SIZE, 3);
-		s4 = new ShipPanel(GUIUtils.SHIP_4_PANEL_POSITION, GUIUtils.SHIP_4_PANEL_SIZE, 2);
-		s3 = new ShipPanel(GUIUtils.SHIP_3_PANEL_POSITION, GUIUtils.SHIP_3_PANEL_SIZE, 2);
-		s2 = new ShipPanel(GUIUtils.SHIP_2_PANEL_POSITION, GUIUtils.SHIP_2_PANEL_SIZE, 1);
-		s1 = new ShipPanel(GUIUtils.SHIP_1_PANEL_POSITION, GUIUtils.SHIP_1_PANEL_SIZE, 1);
-		sv1 = new SCButton(GUIUtils.SERVER_BUTTON_POSITION, GUIUtils.SERVER_BUTTON_SIZE, "sv");
-		sv1.addActionListener(e -> {
-			clientGUI = new ClientGUI();
-			remove(sv1);
-			remove(cl1);
+		this.p1 = new PlayerPanel(GUIUtils.PLAYER_PANEL_POSITION, GUIUtils.PLAYER_PANEL_SIZE);
+		this.s7 = new ShipPanel(GUIUtils.SHIP_7_PANEL_POSITION, GUIUtils.SHIP_7_PANEL_SIZE, 5);
+		this.s6 = new ShipPanel(GUIUtils.SHIP_6_PANEL_POSITION, GUIUtils.SHIP_6_PANEL_SIZE, 4);
+		this.s5 = new ShipPanel(GUIUtils.SHIP_5_PANEL_POSITION, GUIUtils.SHIP_5_PANEL_SIZE, 3);
+		this.s4 = new ShipPanel(GUIUtils.SHIP_4_PANEL_POSITION, GUIUtils.SHIP_4_PANEL_SIZE, 2);
+		this.s3 = new ShipPanel(GUIUtils.SHIP_3_PANEL_POSITION, GUIUtils.SHIP_3_PANEL_SIZE, 2);
+		this.s2 = new ShipPanel(GUIUtils.SHIP_2_PANEL_POSITION, GUIUtils.SHIP_2_PANEL_SIZE, 1);
+		this.s1 = new ShipPanel(GUIUtils.SHIP_1_PANEL_POSITION, GUIUtils.SHIP_1_PANEL_SIZE, 1);
+		this.sv1 = new SCButton(GUIUtils.SERVER_BUTTON_POSITION, GUIUtils.SERVER_BUTTON_SIZE, "sv");
+		this.sv1.addActionListener(e -> {
+			this.clientGUI = new ClientGUI();
+			remove(this.sv1);
+			remove(this.cl1);
 			repaint();
 		});
-		cl1 = new SCButton(GUIUtils.CLIENT_BUTTON_POSITION, GUIUtils.CLIENT_BUTTON_SIZE, "cl");
-		cl1.addActionListener(e -> {
-			serverGUI = new ServerGUI(GUIUtils.showInputDialog(Game.INSTANCE));
-			remove(sv1);
-			remove(cl1);
+		this.cl1 = new SCButton(GUIUtils.CLIENT_BUTTON_POSITION, GUIUtils.CLIENT_BUTTON_SIZE, "cl");
+		this.cl1.addActionListener(e -> {
+			this.serverGUI = new ServerGUI(GUIUtils.showInputDialog(Game.INSTANCE));
+			remove(this.sv1);
+			remove(this.cl1);
 			repaint();
 		});
-		b1 = new ReadyButton(GUIUtils.READY_BUTTON_POSITION, GUIUtils.READY_BUTTON_SIZE);
-		t1 = new EventLog(GUIUtils.EVENT_LOG_POSITION, GUIUtils.EVENT_LOG_SIZE);
-		e1 = new EnemyPanel(GUIUtils.ENEMY_PANEL_POSITION, GUIUtils.ENEMY_PANEL_SIZE);
+		this.b1 = new ReadyButton(GUIUtils.READY_BUTTON_POSITION, GUIUtils.READY_BUTTON_SIZE);
+		this.t1 = new EventLog(GUIUtils.EVENT_LOG_POSITION, GUIUtils.EVENT_LOG_SIZE);
+		this.e1 = new EnemyPanel(GUIUtils.ENEMY_PANEL_POSITION, GUIUtils.ENEMY_PANEL_SIZE);
 
-		super.add(sv1);
-		super.add(cl1);
+		super.add(this.sv1);
+		super.add(this.cl1);
 
-		listener = new DragAndDropListener();
-		super.addMouseListener(listener);
-		super.addMouseMotionListener(listener);
+		this.listener = new DragAndDropListener();
+		super.addMouseListener(this.listener);
+		super.addMouseMotionListener(this.listener);
 		repaint();
 	}
 
 	public void setGameState(final int gameState) {
-		if(gameState == 0) {
+		if (gameState == 0) {
 			super.removeAll();
-			super.add(sv1);
-			super.add(cl1);
+			super.add(this.sv1);
+			super.add(this.cl1);
 			revalidate();
 			repaint();
-		} else if(gameState == 1) {
+		} else if (gameState == 1) {
 			super.removeAll();
-			super.add(s7);
-			super.add(s6);
-			super.add(s5);
-			super.add(s4);
-			super.add(s3);
-			super.add(s2);
-			super.add(s1);
-			super.add(p1);
-			super.add(b1);
-			super.add(e1);
+			super.add(this.s7);
+			super.add(this.s6);
+			super.add(this.s5);
+			super.add(this.s4);
+			super.add(this.s3);
+			super.add(this.s2);
+			super.add(this.s1);
+			super.add(this.p1);
+			super.add(this.b1);
+			super.add(this.e1);
 			revalidate();
 			repaint();
-		} else if(gameState == 2) {
-			if(!eventLogAdded) {
-				super.add(t1);
-				eventLogAdded = true;
+		} else if (gameState == 2) {
+			if (!this.eventLogAdded) {
+				super.add(this.t1);
+				this.eventLogAdded = true;
 			}
 			revalidate();
 			repaint();
-		} else if(gameState == 3) {
-			if(!eventLogAdded) {
-				super.add(t1);
-				eventLogAdded = true;
+		} else if (gameState == 3) {
+			if (!this.eventLogAdded) {
+				super.add(this.t1);
+				this.eventLogAdded = true;
 			}
 			revalidate();
 			repaint();
@@ -127,64 +127,64 @@ public final class Game extends JPanel {
 	}
 
 	public int getGameState() {
-		return gameState;
+		return this.gameState;
 	}
 
 	public PlayerPanel getPlayerPanel() {
-		return p1;
+		return this.p1;
 	}
 
 	public ServerGUI getServerGUI() {
-		return serverGUI;
+		return this.serverGUI;
 	}
 
 	public ClientGUI getClientGUI() {
-		return clientGUI;
+		return this.clientGUI;
 	}
 
 	public EventLog getEventLog() {
-		return t1;
+		return this.t1;
 	}
 
 	public EnemyPanel getEnemyPanel() {
-		return e1;
+		return this.e1;
 	}
 
 	public DragAndDropListener getListener() {
-		return listener;
+		return this.listener;
 	}
 
 	public void purgeNetworkObjects() {
-		clientGUI = null;
-		serverGUI = null;
+		this.clientGUI = null;
+		this.serverGUI = null;
 	}
 
 	public void purgeReadyButton() {
-		remove(b1);
+		remove(this.b1);
 	}
 
 	public void checkLoseCondition() {
-		if(Player.Player1.getHitCoordinates().size() == Player.TOTAL_SHIP_PART_PER_PLAYER) {
+		if (Player.Player1.getHitCoordinates().size() == Player.TOTAL_SHIP_PART_PER_PLAYER) {
 			System.out.println("END!");
 			Player.Player1.sendUntouchedCoordinates();
 			GUIUtils.showEndGameDialog(Game.INSTANCE, "You Lost!               ");
-			super.removeMouseListener(listener);
-			super.removeMouseMotionListener(listener);
+			super.removeMouseListener(this.listener);
+			super.removeMouseMotionListener(this.listener);
 		}
 	}
 
 	public void checkWinCondition() {
-		if(Player.Player2.getHitCoordinates().size() == Player.TOTAL_SHIP_PART_PER_PLAYER) {
+		if (Player.Player2.getHitCoordinates().size() == Player.TOTAL_SHIP_PART_PER_PLAYER) {
 			System.out.println("END!");
 			Player.Player1.sendUntouchedCoordinates();
 			GUIUtils.showEndGameDialog(Game.INSTANCE, "You Won!              ");
-			super.removeMouseListener(listener);
-			super.removeMouseMotionListener(listener);
+			super.removeMouseListener(this.listener);
+			super.removeMouseMotionListener(this.listener);
 		}
 	}
 
 	public static Game get() {
-		if(Game.INSTANCE == null) {
+		if (Game.INSTANCE == null) {
 			Game.INSTANCE = new Game();
 		}
 		return Game.INSTANCE;
@@ -196,7 +196,7 @@ public final class Game extends JPanel {
 		final Graphics2D g2d = (Graphics2D) g;
 		g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		g2d.setFont(GUIUtils.GEORGIA_BOLD_20);
-		if(gameState == 0) {
+		if (this.gameState == 0) {
 			g2d.setColor(GUIUtils.YELLOW);
 			g2d.drawString("CONNECT YOUR OPPONENT", 605, 45);
 			return;
@@ -209,18 +209,18 @@ public final class Game extends JPanel {
 		g2d.setColor(GUIUtils.DARK_GREEN);
 		g2d.setFont(GUIUtils.GEORGIA_BOLD_20);
 		g2d.setColor(GUIUtils.YELLOW);
-		if(gameState == 1) {
+		if (this.gameState == 1) {
 			g2d.drawString("PLACE YOUR SHIPS AND PRESS READY", 540, 45);
 			g2d.drawString("RIGHT MOUSE TO ROTATE", 610, 70);
 			return;
 		}
 		g2d.drawString("Event Log", 700, 295);
-		if(gameState == 2) {
+		if (this.gameState == 2) {
 			g2d.setColor(GUIUtils.DARK_GREEN);
 			g2d.drawString("YOUR TURN", 690, 45);
 			return;
 		}
-		if(gameState == 3) {
+		if (this.gameState == 3) {
 			g2d.setColor(GUIUtils.DARK_RED);
 			g2d.drawString("ENEMIES TURN", 670, 45);
 			return;

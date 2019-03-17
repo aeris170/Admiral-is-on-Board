@@ -33,21 +33,21 @@ public final class Client {
 	}
 
 	void display(final String msg) {
-		cg.append(msg);
+		this.cg.append(msg);
 	}
 
 	void disconnect() {
 		try {
-			if(sInput != null) {
-				sInput.close();
+			if (this.sInput != null) {
+				this.sInput.close();
 			}
-			if(sOutput != null) {
-				sOutput.close();
+			if (this.sOutput != null) {
+				this.sOutput.close();
 			}
-			if(socket != null) {
-				socket.close();
+			if (this.socket != null) {
+				this.socket.close();
 			}
-		} catch(final Exception ex) {
+		} catch (final Exception ex) {
 			ex.printStackTrace();
 		}
 		Game.get().setGameState(Game.CONNECT_STATE);
@@ -55,23 +55,24 @@ public final class Client {
 
 	public boolean start() {
 		try {
-			socket = new Socket(serverIP, port);
-			sInput = new ObjectInputStream(socket.getInputStream());
-			sOutput = new ObjectOutputStream(socket.getOutputStream());
+			this.socket = new Socket("localhost", this.port);
+			this.sInput = new ObjectInputStream(this.socket.getInputStream());
+			this.sOutput = new ObjectOutputStream(this.socket.getOutputStream());
 			final Thread listener = new Thread(new ServerListener());
 			listener.start();
-			sOutput.writeObject(username);
+			this.sOutput.writeObject(this.username);
 			return true;
-		} catch(final Exception ex) {
+		} catch (final Exception ex) {
 			display("Error connecting to server:" + ex);
+			ex.printStackTrace();
 			return false;
 		}
 	}
 
 	public synchronized void sendDisconnect() {
 		try {
-			sOutput.writeObject(new ChatMessage(ChatMessage.DISCONNECT, ""));
-		} catch(final IOException ex) {
+			this.sOutput.writeObject(new ChatMessage(ChatMessage.DISCONNECT, ""));
+		} catch (final IOException ex) {
 			display("Cannot establish connection with server. Restart connection or re-download");
 			disconnect();
 			ex.printStackTrace();
@@ -80,8 +81,8 @@ public final class Client {
 
 	public synchronized void sendMessage(final String msg) {
 		try {
-			sOutput.writeObject(new ChatMessage(ChatMessage.MESSAGE, msg));
-		} catch(final IOException ex) {
+			this.sOutput.writeObject(new ChatMessage(ChatMessage.MESSAGE, msg));
+		} catch (final IOException ex) {
 			display("Cannot establish connection with server. Restart connection or re-download");
 			disconnect();
 			ex.printStackTrace();
@@ -90,8 +91,8 @@ public final class Client {
 
 	public synchronized void sendBoolean(final Boolean b) {
 		try {
-			sOutput.writeObject(new ChatMessage(ChatMessage.BOOLEAN, b));
-		} catch(final IOException ex) {
+			this.sOutput.writeObject(new ChatMessage(ChatMessage.BOOLEAN, b));
+		} catch (final IOException ex) {
 			display("Cannot establish connection with server. Restart connection or re-download");
 			disconnect();
 			ex.printStackTrace();
@@ -100,8 +101,8 @@ public final class Client {
 
 	public synchronized void serializeMove(final Coordinate coord) {
 		try {
-			sOutput.writeObject(new ChatMessage(ChatMessage.MOVE, coord));
-		} catch(final IOException ex) {
+			this.sOutput.writeObject(new ChatMessage(ChatMessage.MOVE, coord));
+		} catch (final IOException ex) {
 			display("Cannot establish connection with server. Restart connection or re-download");
 			disconnect();
 			ex.printStackTrace();
@@ -110,8 +111,8 @@ public final class Client {
 
 	public void serializeUntouchedCoordinate(final UntouchedCoordinate coord) {
 		try {
-			sOutput.writeObject(new ChatMessage(ChatMessage.UNTOUCHED_COORDINATE, coord));
-		} catch(final IOException ex) {
+			this.sOutput.writeObject(new ChatMessage(ChatMessage.UNTOUCHED_COORDINATE, coord));
+		} catch (final IOException ex) {
 			display("Cannot establish connection with server. Restart connection or re-download");
 			disconnect();
 			ex.printStackTrace();
@@ -122,9 +123,9 @@ public final class Client {
 		try {
 			final Game game = Game.get();
 			final boolean hit = Player.Player1.checkHit(coord.getX(), coord.getY());
-			sOutput.writeObject(new ChatMessage(ChatMessage.BOOLEAN, hit));
+			this.sOutput.writeObject(new ChatMessage(ChatMessage.BOOLEAN, hit));
 			Player.Player1.getFiredCoordinates().add(coord);
-			if(hit) {
+			if (hit) {
 				Player.Player1.hit(coord);
 			} else {
 				Player.Player1.miss(coord);
@@ -133,7 +134,7 @@ public final class Client {
 			game.getEventLog().append(Color.RED.darker().darker(), "Enemy shot " + coord.getX() + " | " + coord.getY() + ". " + (hit ? "Hit!" : "Miss!"));
 			game.repaint();
 			game.checkLoseCondition();
-		} catch(final IOException ex) {
+		} catch (final IOException ex) {
 			display("Cannot establish connection with server. Restart connection or re-download");
 			disconnect();
 			ex.printStackTrace();
@@ -151,41 +152,42 @@ public final class Client {
 
 		@Override
 		public void run() {
-			while(true) {
+			while (true) {
 				try {
-					final Object data = sInput.readObject();
-					if(data instanceof String) {
+					final Object data = Client.this.sInput.readObject();
+					if (data instanceof String) {
 						display((String) data);
-					} else if((data instanceof Coordinate) && !(data instanceof UntouchedCoordinate)) {
+					} else if ((data instanceof Coordinate) && !(data instanceof UntouchedCoordinate)) {
 						deserializeMove((Coordinate) data);
-					} else if(data instanceof Boolean) {
+					} else if (data instanceof Boolean) {
 						final Game game = Game.get();
-						if(!Player.Player2.isReady() && (Boolean) data) {
+						if (!Player.Player2.isReady() && (Boolean) data) {
 							Player.Player2.markReady();
-							if(Player.Player1.isReady() && Player.Player2.isReady()) {
+							if (Player.Player1.isReady() && Player.Player2.isReady()) {
 								game.purgeReadyButton();
 								game.setGameState(Game.ENEMY_TURN);
 							}
 						} else {
 							final Queue<Coordinate> queuedCoordinates = Game.get().getListener().getLastHits();
 							final Coordinate topMostCoordinate = queuedCoordinates.poll();
-							if((Boolean) data) {
+							if ((Boolean) data) {
 								Player.Player2.hit(topMostCoordinate);
 								game.getEventLog().append(GUIUtils.DARK_GREEN, "You shot " + topMostCoordinate.getX() + " | " + topMostCoordinate.getY() + ". " + "Hit!");
 							} else {
 								Player.Player2.miss(topMostCoordinate);
-								game.getEventLog().append(GUIUtils.DARK_GREEN, "You shot " + topMostCoordinate.getX() + " | " + topMostCoordinate.getY() + ". " + "Miss!");
+								game.getEventLog().append(GUIUtils.DARK_GREEN,
+								        "You shot " + topMostCoordinate.getX() + " | " + topMostCoordinate.getY() + ". " + "Miss!");
 								game.setGameState(Game.ENEMY_TURN);
 							}
 							game.repaint();
 							game.checkWinCondition();
 						}
-					} else if(data instanceof UntouchedCoordinate) {
+					} else if (data instanceof UntouchedCoordinate) {
 						Client.deserializeUntouchedCoordinate((UntouchedCoordinate) data);
 					} else {
 						throw new RuntimeException("Client received unidentified data from server! Client.java, 151");
 					}
-				} catch(IOException | ClassNotFoundException ex) {
+				} catch (IOException | ClassNotFoundException ex) {
 					display("Disconnected! Either server closed the connection, or server didn't respond.");
 					disconnect();
 					ex.printStackTrace();

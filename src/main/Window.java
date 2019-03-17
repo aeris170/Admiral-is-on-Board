@@ -36,9 +36,7 @@ public final class Window extends JFrame {
 	 * @param args the arguments
 	 */
 	public static void main(final String[] args) {
-		SwingUtilities.invokeLater(() -> {
-			Window.createAndShowGUI();
-		});
+		SwingUtilities.invokeLater(() -> Window.createAndShowGUI());
 	}
 
 	/**
