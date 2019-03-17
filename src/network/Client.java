@@ -33,19 +33,19 @@ public final class Client {
 	}
 
 	void display(final String msg) {
-		this.cg.append(msg);
+		cg.append(msg);
 	}
 
 	void disconnect() {
 		try {
-			if (this.sInput != null) {
-				this.sInput.close();
+			if (sInput != null) {
+				sInput.close();
 			}
-			if (this.sOutput != null) {
-				this.sOutput.close();
+			if (sOutput != null) {
+				sOutput.close();
 			}
-			if (this.socket != null) {
-				this.socket.close();
+			if (socket != null) {
+				socket.close();
 			}
 		} catch (final Exception ex) {
 			ex.printStackTrace();
@@ -55,12 +55,12 @@ public final class Client {
 
 	public boolean start() {
 		try {
-			this.socket = new Socket("localhost", this.port);
-			this.sInput = new ObjectInputStream(this.socket.getInputStream());
-			this.sOutput = new ObjectOutputStream(this.socket.getOutputStream());
+			socket = new Socket("localhost", port);
+			sInput = new ObjectInputStream(socket.getInputStream());
+			sOutput = new ObjectOutputStream(socket.getOutputStream());
 			final Thread listener = new Thread(new ServerListener());
 			listener.start();
-			this.sOutput.writeObject(this.username);
+			sOutput.writeObject(username);
 			return true;
 		} catch (final Exception ex) {
 			display("Error connecting to server:" + ex);
@@ -71,7 +71,7 @@ public final class Client {
 
 	public synchronized void sendDisconnect() {
 		try {
-			this.sOutput.writeObject(new ChatMessage(ChatMessage.DISCONNECT, ""));
+			sOutput.writeObject(new ChatMessage(ChatMessage.DISCONNECT, ""));
 		} catch (final IOException ex) {
 			display("Cannot establish connection with server. Restart connection or re-download");
 			disconnect();
@@ -81,7 +81,7 @@ public final class Client {
 
 	public synchronized void sendMessage(final String msg) {
 		try {
-			this.sOutput.writeObject(new ChatMessage(ChatMessage.MESSAGE, msg));
+			sOutput.writeObject(new ChatMessage(ChatMessage.MESSAGE, msg));
 		} catch (final IOException ex) {
 			display("Cannot establish connection with server. Restart connection or re-download");
 			disconnect();
@@ -91,7 +91,7 @@ public final class Client {
 
 	public synchronized void sendBoolean(final Boolean b) {
 		try {
-			this.sOutput.writeObject(new ChatMessage(ChatMessage.BOOLEAN, b));
+			sOutput.writeObject(new ChatMessage(ChatMessage.BOOLEAN, b));
 		} catch (final IOException ex) {
 			display("Cannot establish connection with server. Restart connection or re-download");
 			disconnect();
@@ -101,7 +101,7 @@ public final class Client {
 
 	public synchronized void serializeMove(final Coordinate coord) {
 		try {
-			this.sOutput.writeObject(new ChatMessage(ChatMessage.MOVE, coord));
+			sOutput.writeObject(new ChatMessage(ChatMessage.MOVE, coord));
 		} catch (final IOException ex) {
 			display("Cannot establish connection with server. Restart connection or re-download");
 			disconnect();
@@ -111,7 +111,7 @@ public final class Client {
 
 	public void serializeUntouchedCoordinate(final UntouchedCoordinate coord) {
 		try {
-			this.sOutput.writeObject(new ChatMessage(ChatMessage.UNTOUCHED_COORDINATE, coord));
+			sOutput.writeObject(new ChatMessage(ChatMessage.UNTOUCHED_COORDINATE, coord));
 		} catch (final IOException ex) {
 			display("Cannot establish connection with server. Restart connection or re-download");
 			disconnect();
@@ -123,7 +123,7 @@ public final class Client {
 		try {
 			final Game game = Game.get();
 			final boolean hit = Player.Player1.checkHit(coord.getX(), coord.getY());
-			this.sOutput.writeObject(new ChatMessage(ChatMessage.BOOLEAN, hit));
+			sOutput.writeObject(new ChatMessage(ChatMessage.BOOLEAN, hit));
 			Player.Player1.getFiredCoordinates().add(coord);
 			if (hit) {
 				Player.Player1.hit(coord);
@@ -154,10 +154,10 @@ public final class Client {
 		public void run() {
 			while (true) {
 				try {
-					final Object data = Client.this.sInput.readObject();
+					final Object data = sInput.readObject();
 					if (data instanceof String) {
 						display((String) data);
-					} else if ((data instanceof Coordinate) && !(data instanceof UntouchedCoordinate)) {
+					} else if (data instanceof Coordinate && !(data instanceof UntouchedCoordinate)) {
 						deserializeMove((Coordinate) data);
 					} else if (data instanceof Boolean) {
 						final Game game = Game.get();

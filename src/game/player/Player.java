@@ -23,56 +23,56 @@ public final class Player {
 	private List<UntouchedCoordinate> untouchedCoordinates;
 
 	private Player() {
-		this.ready = false;
-		this.tiles = new Tiles();
-		this.firedCoordinates = new ArrayList<>();
-		this.missedCoordinates = new ArrayList<>();
-		this.hitCoordinates = new ArrayList<>();
-		this.untouchedCoordinates = new ArrayList<>();
+		ready = false;
+		tiles = new Tiles();
+		firedCoordinates = new ArrayList<>();
+		missedCoordinates = new ArrayList<>();
+		hitCoordinates = new ArrayList<>();
+		untouchedCoordinates = new ArrayList<>();
 	}
 
 	public boolean isReady() {
-		return this.ready;
+		return ready;
 	}
 
 	public void markReady() {
-		this.ready = true;
+		ready = true;
 	}
 
 	public boolean[][] getTiles() {
-		return this.tiles.getTiles();
+		return tiles.getTiles();
 	}
 
 	public List<Coordinate> getFiredCoordinates() {
-		return this.firedCoordinates;
+		return firedCoordinates;
 	}
 
 	public List<Coordinate> getHitCoordinates() {
-		return this.hitCoordinates;
+		return hitCoordinates;
 	}
 
 	public List<Coordinate> getMissedCoordinates() {
-		return this.missedCoordinates;
+		return missedCoordinates;
 	}
 
 	public List<UntouchedCoordinate> getUntouchedCoordinates() {
-		return this.untouchedCoordinates;
+		return untouchedCoordinates;
 	}
 
 	public void addToCoordinates(final Coordinate coordinate) {
-		this.firedCoordinates.add(coordinate);
+		firedCoordinates.add(coordinate);
 	}
 
 	public void addToUntouchedCoordinates(final UntouchedCoordinate coord) {
-		this.untouchedCoordinates.add(coord);
+		untouchedCoordinates.add(coord);
 	}
 
 	public void hit(final Coordinate coordinate) {
-		this.hitCoordinates.add(coordinate);
+		hitCoordinates.add(coordinate);
 	}
 
 	public void miss(final Coordinate coordinate) {
-		this.missedCoordinates.add(coordinate);
+		missedCoordinates.add(coordinate);
 	}
 
 	public boolean hasPlacedAllShips() {
@@ -95,7 +95,7 @@ public final class Player {
 		for (int i = 0; i < tiles.length; i++) {
 			for (int j = 0; j < tiles[i].length; j++) {
 				final Coordinate candidate = new Coordinate(i, j);
-				if (tiles[i][j] && !this.hitCoordinates.contains(candidate)) {
+				if (tiles[i][j] && !hitCoordinates.contains(candidate)) {
 					if (game.getClientGUI() != null) {
 						game.getClientGUI().getClient().serializeUntouchedCoordinate(UntouchedCoordinate.cast(candidate));
 					} else if (game.getServerGUI() != null) {
@@ -108,19 +108,19 @@ public final class Player {
 
 	public boolean placeShip(final int length, final int orientation, final int x, final int y) {
 		if (orientation == 0) {
-			return this.tiles.placeVerticalShip(length, x, y);
+			return tiles.placeVerticalShip(length, x, y);
 		} else if (orientation == 1) {
-			return this.tiles.placeHorizontalShip(length, x, y);
+			return tiles.placeHorizontalShip(length, x, y);
 		} else {
 			return false;
 		}
 	}
 
 	public boolean checkHit(final int x, final int y) {
-		return this.tiles.checkHit(x, y);
+		return tiles.checkHit(x, y);
 	}
 
 	public String tilesPrettyPrint() {
-		return this.tiles.prettyPrint();
+		return tiles.prettyPrint();
 	}
 }

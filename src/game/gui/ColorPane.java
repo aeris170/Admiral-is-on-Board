@@ -1,9 +1,7 @@
 package game.gui;
 
-/*
- * Java Swing, 2nd Edition By Marc Loy, Robert Eckstein, Dave Wood, James
- * Elliott, Brian Cole ISBN: 0-596-00408-7 Publisher: O'Reilly
- */
+/* Java Swing, 2nd Edition By Marc Loy, Robert Eckstein, Dave Wood, James
+ * Elliott, Brian Cole ISBN: 0-596-00408-7 Publisher: O'Reilly */
 // ColorPane.java
 // A simple extension of JTextPane that allows the user to easily append
 // colored text to the document.
@@ -49,7 +47,7 @@ public final class ColorPane extends JTextPane {
 		try {
 			// credits to camickr from stackoverflow.com
 			getStyledDocument().insertString(getStyledDocument().getLength(), s, aset);
-		} catch(final BadLocationException ex) {
+		} catch (final BadLocationException ex) {
 			ex.printStackTrace();
 		}
 		// replaceSelection(s); // there is no selection, so inserts at caret

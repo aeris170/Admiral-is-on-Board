@@ -94,14 +94,14 @@ public abstract class GUIUtils {
 	static {
 		try {
 			GUIUtils.EX_MARK = ImageIO.read(GUIUtils.class.getResourceAsStream("/exmark.png"));
-		} catch(final IOException ex) {
+		} catch (final IOException ex) {
 			ex.printStackTrace();
 		}
 	}
 
 	public static void recursivePaint(final Container ct) {
-		for(final Component c : ct.getComponents()) {
-			if(c instanceof Container) {
+		for (final Component c : ct.getComponents()) {
+			if (c instanceof Container) {
 				c.setBackground(GUIUtils.DARK_BLUE);
 				c.setForeground(GUIUtils.WHITE);
 				GUIUtils.recursivePaint((Container) c);
@@ -148,10 +148,10 @@ public abstract class GUIUtils {
 				g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 				g2d.setStroke(GUIUtils.STROKE_0);
 				g2d.setColor(GUIUtils.LIGHTER_RED);
-				if(getModel().isRollover()) {
+				if (getModel().isRollover()) {
 					g2d.setColor(GUIUtils.LIGHT_RED);
 				}
-				if(getModel().isPressed()) {
+				if (getModel().isPressed()) {
 					g2d.setColor(GUIUtils.RED);
 				}
 				g2d.fillRect(0, 0, getWidth(), getHeight());
@@ -164,7 +164,7 @@ public abstract class GUIUtils {
 		};
 
 		final JOptionPane optionPane = new JOptionPane(panel, JOptionPane.QUESTION_MESSAGE, JOptionPane.OK_OPTION, UIManager.getIcon("OptionPane.questionIcon"),
-				new JButton[] {button}, button);
+		        new JButton[] { button }, button);
 		button.addActionListener(e -> {
 			optionPane.setInputValue(inputField.getText());
 			optionPane.setValue(JOptionPane.OK_OPTION);
@@ -217,10 +217,10 @@ public abstract class GUIUtils {
 				g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 				g2d.setStroke(GUIUtils.STROKE_0);
 				g2d.setColor(GUIUtils.LIGHTER_RED);
-				if(getModel().isRollover()) {
+				if (getModel().isRollover()) {
 					g2d.setColor(GUIUtils.LIGHT_RED);
 				}
-				if(getModel().isPressed()) {
+				if (getModel().isPressed()) {
 					g2d.setColor(GUIUtils.RED);
 				}
 				g2d.fillRect(0, 0, getWidth(), getHeight());
@@ -235,7 +235,7 @@ public abstract class GUIUtils {
 			SwingUtilities.getWindowAncestor((Component) e.getSource()).dispose();
 		});
 
-		final JOptionPane optionPane = new JOptionPane(label, JOptionPane.WARNING_MESSAGE, JOptionPane.OK_OPTION, null, new JButton[] {button}, button);
+		final JOptionPane optionPane = new JOptionPane(label, JOptionPane.WARNING_MESSAGE, JOptionPane.OK_OPTION, null, new JButton[] { button }, button);
 		optionPane.setOpaque(true);
 		optionPane.setBackground(GUIUtils.DARK_BLUE);
 		GUIUtils.recursivePaint(optionPane);

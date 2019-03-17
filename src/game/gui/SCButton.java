@@ -27,9 +27,9 @@ public final class SCButton extends CustomButton {
 		g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		g2d.setColor(GUIUtils.WHITE);
 		g2d.setFont(GUIUtils.GEORGIA_BOLD_30);
-		if (this.type.equals("sv")) {
+		if (type.equals("sv")) {
 			g2d.drawString("CLIENT", 14, 50);
-		} else if (this.type.equals("cl")) {
+		} else if (type.equals("cl")) {
 			g2d.drawString("SERVER", 8, 50);
 		}
 	}

@@ -5,32 +5,32 @@ public final class Tiles {
 	private boolean[][] tiles;
 
 	public Tiles() {
-		this.tiles = new boolean[10][10];
+		tiles = new boolean[10][10];
 	}
 
 	public boolean placeVerticalShip(final int length, final int x, final int y) {
-		if ((y + length) < (this.tiles.length + 1)) {
-			if ((y > 0) && this.tiles[x][y - 1]) {
+		if (y + length < tiles.length + 1) {
+			if (y > 0 && tiles[x][y - 1]) {
 				return false;
 			}
 			for (int i = 0; i < length; i++) {
-				if ((x > 0) && this.tiles[x - 1][y + i]) {
+				if (x > 0 && tiles[x - 1][y + i]) {
 					return false;
 				}
-				if ((x < (this.tiles[i].length - 1)) && this.tiles[x + 1][y + i]) {
+				if (x < tiles[i].length - 1 && tiles[x + 1][y + i]) {
 					return false;
 				}
 			}
-			if (((y + length) < this.tiles.length) && this.tiles[x][y + length]) {
+			if (y + length < tiles.length && tiles[x][y + length]) {
 				return false;
 			}
 			for (int i = 0; i < length; i++) {
-				if (this.tiles[x][y + i]) {
+				if (tiles[x][y + i]) {
 					return false;
 				}
 			}
 			for (int i = 0; i < length; i++) {
-				this.tiles[x][y + i] = true;
+				tiles[x][y + i] = true;
 			}
 			return true;
 		}
@@ -38,28 +38,28 @@ public final class Tiles {
 	}
 
 	public boolean placeHorizontalShip(final int length, final int x, final int y) {
-		if ((x + length) < (this.tiles.length + 1)) {
-			if ((x > 0) && this.tiles[x - 1][y]) {
+		if (x + length < tiles.length + 1) {
+			if (x > 0 && tiles[x - 1][y]) {
 				return false;
 			}
 			for (int i = 0; i < length; i++) {
-				if ((y > 0) && this.tiles[x + i][y - 1]) {
+				if (y > 0 && tiles[x + i][y - 1]) {
 					return false;
 				}
-				if ((y < (this.tiles[i].length - 1)) && this.tiles[x + i][y + 1]) {
+				if (y < tiles[i].length - 1 && tiles[x + i][y + 1]) {
 					return false;
 				}
 			}
-			if (((x + length) < this.tiles.length) && this.tiles[x + length][y]) {
+			if (x + length < tiles.length && tiles[x + length][y]) {
 				return false;
 			}
 			for (int i = 0; i < length; i++) {
-				if (this.tiles[x + i][y] == true) {
+				if (tiles[x + i][y] == true) {
 					return false;
 				}
 			}
 			for (int i = 0; i < length; i++) {
-				this.tiles[x + i][y] = true;
+				tiles[x + i][y] = true;
 			}
 			return true;
 		}
@@ -67,16 +67,16 @@ public final class Tiles {
 	}
 
 	public boolean checkHit(final int x, final int y) {
-		return this.tiles[x][y];
+		return tiles[x][y];
 	}
 
 	public boolean[][] getTiles() {
-		return this.tiles;
+		return tiles;
 	}
 
 	public String prettyPrint() {
 		String s = "";
-		for (final boolean[] ba : this.tiles) {
+		for (final boolean[] ba : tiles) {
 			for (final boolean b : ba) {
 				if (b) {
 					s += "[T]";

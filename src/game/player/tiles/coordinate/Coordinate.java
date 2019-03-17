@@ -15,7 +15,7 @@ public class Coordinate implements Serializable {
 	}
 
 	public int getX() {
-		return this.x;
+		return x;
 	}
 
 	public void setX(final int x) {
@@ -23,7 +23,7 @@ public class Coordinate implements Serializable {
 	}
 
 	public int getY() {
-		return this.y;
+		return y;
 	}
 
 	public void setY(final int y) {
@@ -32,7 +32,7 @@ public class Coordinate implements Serializable {
 
 	@Override
 	public String toString() {
-		return this.x + " | " + this.y;
+		return x + " | " + y;
 	}
 
 	@Override
@@ -44,7 +44,7 @@ public class Coordinate implements Serializable {
 			return false;
 		}
 		final Coordinate o2 = (Coordinate) o;
-		if ((this.x == o2.x) && (this.y == o2.y)) {
+		if (x == o2.x && y == o2.y) {
 			return true;
 		}
 		return false;
@@ -52,6 +52,6 @@ public class Coordinate implements Serializable {
 
 	@Override
 	public int hashCode() {
-		return (this.x * 17) + (this.y * 93);
+		return x * 17 + y * 93;
 	}
 }

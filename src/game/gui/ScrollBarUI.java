@@ -24,7 +24,7 @@ public class ScrollBarUI extends BasicScrollBarUI {
 
 			@Override
 			public Dimension getPreferredSize() {
-				return ScrollBarUI.this.d;
+				return d;
 			}
 		};
 	}
@@ -37,7 +37,7 @@ public class ScrollBarUI extends BasicScrollBarUI {
 
 			@Override
 			public Dimension getPreferredSize() {
-				return ScrollBarUI.this.d;
+				return d;
 			}
 		};
 	}
@@ -55,9 +55,9 @@ public class ScrollBarUI extends BasicScrollBarUI {
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		Color color = null;
 		final JScrollBar sb = (JScrollBar) c;
-		if (!sb.isEnabled() || (r.width > r.height)) {
+		if (!sb.isEnabled() || r.width > r.height) {
 			return;
-		} else if (this.isDragging) {
+		} else if (isDragging) {
 			color = GUIUtils.GRAY;
 		} else if (isThumbRollover()) {
 			color = GUIUtils.LIGHT_GRAY;
@@ -74,6 +74,6 @@ public class ScrollBarUI extends BasicScrollBarUI {
 	@Override
 	protected void setThumbBounds(final int x, final int y, final int width, final int height) {
 		super.setThumbBounds(x, y, width, height);
-		this.scrollbar.repaint();
+		scrollbar.repaint();
 	}
 }

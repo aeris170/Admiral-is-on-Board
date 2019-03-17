@@ -29,8 +29,8 @@ public final class Server {
 	public Server(final int port, final ServerGUI sg) {
 		this.sg = sg;
 		this.port = port;
-		this.sdf = new SimpleDateFormat("HH:mm:ss");
-		this.al = new ArrayList<ClientThread>() {
+		sdf = new SimpleDateFormat("HH:mm:ss");
+		al = new ArrayList<ClientThread>() {
 
 			private static final long serialVersionUID = -7896866591756916202L;
 
@@ -49,67 +49,67 @@ public final class Server {
 	}
 
 	void display(final String msg) {
-		final String time = this.sdf.format(new Date()) + " " + msg;
-		this.sg.append(time + "\n");
+		final String time = sdf.format(new Date()) + " " + msg;
+		sg.append(time + "\n");
 	}
 
 	synchronized void broadcast(final String message) {
-		final String time = this.sdf.format(new Date());
+		final String time = sdf.format(new Date());
 		final String messageLf = time + " " + message + "\n";
-		this.sg.append(messageLf);
-		for (int i = this.al.size(); --i >= 0;) {
-			final ClientThread ct = this.al.get(i);
+		sg.append(messageLf);
+		for (int i = al.size(); --i >= 0;) {
+			final ClientThread ct = al.get(i);
 			if (!ct.write(messageLf)) {
-				this.al.remove(i);
+				al.remove(i);
 				display("Client " + ct.username + " disconnected");
 			}
 		}
 	}
 
 	synchronized void remove(final int id) {
-		for (int i = 0; i < this.al.size(); ++i) {
-			final ClientThread ct = this.al.get(i);
+		for (int i = 0; i < al.size(); ++i) {
+			final ClientThread ct = al.get(i);
 			if (ct.id == id) {
-				this.al.remove(i);
+				al.remove(i);
 				return;
 			}
 		}
 	}
 
 	public void start() {
-		this.keepGoing = true;
-		try (final ServerSocket serverSocket = new ServerSocket(this.port)) {
-			while (this.keepGoing) {
-				display("Server waiting for Client on port " + this.port + ".");
+		keepGoing = true;
+		try (final ServerSocket serverSocket = new ServerSocket(port)) {
+			while (keepGoing) {
+				display("Server waiting for Client on port " + port + ".");
 				final Socket socket = serverSocket.accept();
-				if (!this.keepGoing) {
+				if (!keepGoing) {
 					socket.close();
 					break;
 				}
 				final ClientThread t = new ClientThread(socket);
-				if (this.al.add(t)) {
-					if (this.al.size() == 2) {
+				if (al.add(t)) {
+					if (al.size() == 2) {
 						Game.get().setGameState(Game.PREPARATION_STATE);
 					}
 					t.start();
 				}
 			}
 			serverSocket.close();
-			for (int i = 0; i < this.al.size(); ++i) {
-				final ClientThread tc = this.al.get(i);
+			for (int i = 0; i < al.size(); ++i) {
+				final ClientThread tc = al.get(i);
 				tc.sInput.close();
 				tc.sOutput.close();
 				tc.socket.close();
 			}
 		} catch (final IOException ex) {
-			final String msg = this.sdf.format(new Date()) + " Exception on new ServerSocket: " + ex + "\n";
+			final String msg = sdf.format(new Date()) + " Exception on new ServerSocket: " + ex + "\n";
 			display(msg);
 			ex.printStackTrace();
 		}
 	}
 
 	public void stop() {
-		this.keepGoing = false;
+		keepGoing = false;
 	}
 
 	private final class ClientThread extends Thread {
@@ -124,12 +124,12 @@ public final class Server {
 		private ChatMessage cm;
 
 		public ClientThread(final Socket socket) {
-			this.id = ++Server.uniqueId;
+			id = ++Server.uniqueId;
 			this.socket = socket;
 			try {
-				this.sOutput = new ObjectOutputStream(socket.getOutputStream());
-				this.sInput = new ObjectInputStream(socket.getInputStream());
-				this.username = (String) this.sInput.readObject();
+				sOutput = new ObjectOutputStream(socket.getOutputStream());
+				sInput = new ObjectInputStream(socket.getInputStream());
+				username = (String) sInput.readObject();
 			} catch (final IOException ex) {
 				ex.printStackTrace();
 			} catch (final ClassNotFoundException ex) {
@@ -138,12 +138,12 @@ public final class Server {
 		}
 
 		public String getUsername() {
-			return this.username;
+			return username;
 		}
 
 		public String getIP() {
 			// return socket.getInetAddress().toString();
-			return (((InetSocketAddress) this.socket.getRemoteSocketAddress()).getAddress()).toString().replace("/", "");
+			return ((InetSocketAddress) socket.getRemoteSocketAddress()).getAddress().toString().replace("/", "");
 		}
 
 		@Override
@@ -151,79 +151,79 @@ public final class Server {
 			boolean keepGoing = true;
 			while (keepGoing) {
 				try {
-					this.cm = (ChatMessage) this.sInput.readObject();
+					cm = (ChatMessage) sInput.readObject();
 				} catch (final IOException ex) {
 					ex.printStackTrace();
 				} catch (final ClassNotFoundException ex) {
 					ex.printStackTrace();
 				}
-				switch (this.cm.getType()) {
+				switch (cm.getType()) {
 					case ChatMessage.DISCONNECT:
-						display(this.username + " disconnected.");
-						broadcast(this.username + "disconnected.");
+						display(username + " disconnected.");
+						broadcast(username + "disconnected.");
 						Game.get().setGameState(Game.CONNECT_STATE);
 						keepGoing = false;
 						break;
 					case ChatMessage.MESSAGE:
-						broadcast(this.username + ": " + this.cm.getMessage());
+						broadcast(username + ": " + cm.getMessage());
 						break;
 					case ChatMessage.MOVE:
-						sendMove(this.cm.getCoordinate());
+						sendMove(cm.getCoordinate());
 						break;
 					case ChatMessage.BOOLEAN:
-						sendBoolean(Boolean.parseBoolean(this.cm.getMessage()));
+						sendBoolean(Boolean.parseBoolean(cm.getMessage()));
 						break;
 					case ChatMessage.UNTOUCHED_COORDINATE:
-						sendUntouchedCoordinate(this.cm.getCoordinate());
+						sendUntouchedCoordinate(cm.getCoordinate());
 						break;
 					default:
 						break;
 				}
 			}
-			remove(this.id);
+			remove(id);
 			close();
 		}
 
 		private synchronized void sendMove(final Coordinate coord) {
-			for (int i = Server.this.al.size() - 1; i >= 0; i--) {
-				final ClientThread ct = Server.this.al.get(i);
-				if ((ct != this) && !ct.write(coord)) {
-					Server.this.al.remove(i);
+			for (int i = al.size() - 1; i >= 0; i--) {
+				final ClientThread ct = al.get(i);
+				if (ct != this && !ct.write(coord)) {
+					al.remove(i);
 					display("Disconnected Client: " + ct.username);
 				}
 			}
 		}
 
 		private synchronized void sendBoolean(final Boolean b) {
-			for (int i = Server.this.al.size() - 1; i >= 0; i--) {
-				final ClientThread ct = Server.this.al.get(i);
-				if ((ct != this) && !ct.write(b)) {
-					Server.this.al.remove(i);
+			for (int i = al.size() - 1; i >= 0; i--) {
+				final ClientThread ct = al.get(i);
+				if (ct != this && !ct.write(b)) {
+					al.remove(i);
 					display("Disconnected Client: " + ct.username);
 				}
 			}
 		}
 
 		private synchronized void sendUntouchedCoordinate(final Coordinate coord) {
-			for (int i = Server.this.al.size() - 1; i >= 0; i--) {
-				final ClientThread ct = Server.this.al.get(i);
-				if ((ct != this) && !ct.write(UntouchedCoordinate.cast(coord))) {
-					Server.this.al.remove(i);
+			for (int i = al.size() - 1; i >= 0; i--) {
+				final ClientThread ct = al.get(i);
+				if (ct != this && !ct.write(UntouchedCoordinate.cast(coord))) {
+					al.remove(i);
 					display("Disconnected Client: " + ct.username);
 				}
 			}
 		}
 
 		boolean write(final Object msg) {
-			if (!this.socket.isConnected()) {
+			if (!socket.isConnected()) {
 				close();
 				return false;
 			}
 			try {
-				this.sOutput.writeObject(msg);
+				sOutput.writeObject(msg);
 				return true;
 			} catch (final IOException e) {
-				display("Error sending message to " + this.username);
+				display("Error sending message to " + username);
 				display(e.toString());
 			}
 			return true;
@@ -231,14 +231,14 @@ public final class Server {
 
 		void close() {
 			try {
-				if (this.sOutput != null) {
-					this.sOutput.close();
+				if (sOutput != null) {
+					sOutput.close();
 				}
-				if (this.sInput != null) {
-					this.sInput.close();
+				if (sInput != null) {
+					sInput.close();
 				}
-				if (this.socket != null) {
-					this.socket.close();
+				if (socket != null) {
+					socket.close();
 				}
 			} catch (final IOException ex) {
 				ex.printStackTrace();

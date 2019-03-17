@@ -17,12 +17,12 @@ public final class ChatMessage implements Serializable {
 
 	public ChatMessage(final int type, final String msg) {
 		this.type = type;
-		this.message = msg;
+		message = msg;
 	}
 
 	public ChatMessage(final int type, final boolean b) {
 		this.type = type;
-		this.message = new Boolean(b).toString();
+		message = new Boolean(b).toString();
 	}
 
 	public ChatMessage(final int type, final Coordinate coord) {
@@ -31,14 +31,14 @@ public final class ChatMessage implements Serializable {
 	}
 
 	int getType() {
-		return this.type;
+		return type;
 	}
 
 	String getMessage() {
-		return this.message;
+		return message;
 	}
 
 	Coordinate getCoordinate() {
-		return this.coord;
+		return coord;
 	}
 }

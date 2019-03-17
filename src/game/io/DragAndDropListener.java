@@ -27,7 +27,7 @@ public final class DragAndDropListener extends MouseInputAdapter {
 	}
 
 	public Queue<Coordinate> getLastHits() {
-		return this.lastHits;
+		return lastHits;
 	}
 
 	/* (non-Javadoc)
@@ -36,16 +36,16 @@ public final class DragAndDropListener extends MouseInputAdapter {
 	public void mousePressed(final MouseEvent e) {
 		final int clickedMouseButton = e.getButton();
 		if (clickedMouseButton == MouseEvent.BUTTON1) {
-			this.pressed = e;
+			pressed = e;
 			final Game game = Game.get();
 			if (game.getComponentAt(e.getPoint()) instanceof ShipPanel) {
-				this.movingShip = (ShipPanel) game.getComponentAt(e.getPoint());
-				this.movingShip.setSize(this.movingShip.getWidth() * 2, this.movingShip.getHeight() * 2);
-				this.movingShip.setLocation(this.pressed.getX() - (this.movingShip.getLength() * 7), this.pressed.getY() - 30);
+				movingShip = (ShipPanel) game.getComponentAt(e.getPoint());
+				movingShip.setSize(movingShip.getWidth() * 2, movingShip.getHeight() * 2);
+				movingShip.setLocation(pressed.getX() - movingShip.getLength() * 7, pressed.getY() - 30);
 			}
-			if (game.getComponentAt(this.pressed.getPoint()) instanceof EnemyPanel) {
+			if (game.getComponentAt(pressed.getPoint()) instanceof EnemyPanel) {
 				if (game.getGameState() == Game.PLAYER_TURN) {
-					final Coordinate clicked = DragAndDropListener.translateforEnemyPanel(this.pressed.getX(), this.pressed.getY());
+					final Coordinate clicked = DragAndDropListener.translateforEnemyPanel(pressed.getX(), pressed.getY());
 					if (!Player.Player2.getFiredCoordinates().contains(clicked)) {
 						Player.Player2.addToCoordinates(clicked);
 						if (game.getClientGUI() != null) {
@@ -53,15 +53,15 @@ public final class DragAndDropListener extends MouseInputAdapter {
 						} else if (game.getServerGUI() != null) {
 							game.getServerGUI().getAutoClient().getClient().serializeMove(clicked);
 						}
-						this.lastHits.add(clicked);
+						lastHits.add(clicked);
 					}
 				}
 			}
 			game.repaint();
 		} else if (clickedMouseButton == MouseEvent.BUTTON3) {
-			if (this.movingShip != null) {
-				this.movingShip.setSize(this.movingShip.getHeight(), this.movingShip.getWidth());
-				this.movingShip.setVertical(!this.movingShip.isVertical());
+			if (movingShip != null) {
+				movingShip.setSize(movingShip.getHeight(), movingShip.getWidth());
+				movingShip.setVertical(!movingShip.isVertical());
 			}
 		}
 	}
@@ -73,24 +73,24 @@ public final class DragAndDropListener extends MouseInputAdapter {
 		final int clickedMouseButton = e.getButton();
 		final Game game = Game.get();
 		if (clickedMouseButton == MouseEvent.BUTTON1) {
-			if (this.movingShip != null) {
-				this.movingShip.setLocation(this.movingShip.getInitialLocation());
-				this.movingShip.setSize(this.movingShip.getLength() * 30, 30);
+			if (movingShip != null) {
+				movingShip.setLocation(movingShip.getInitialLocation());
+				movingShip.setSize(movingShip.getLength() * 30, 30);
 				if (game.getComponentAt(e.getPoint()) instanceof PlayerPanel) {
-					if (this.movingShip.isVertical()) {
-						if (Player.Player1.placeShip(this.movingShip.getLength(), 0, e.getX() / 60, (e.getY() - 100) / 60)) {
-							game.remove(this.movingShip);
+					if (movingShip.isVertical()) {
+						if (Player.Player1.placeShip(movingShip.getLength(), 0, e.getX() / 60, (e.getY() - 100) / 60)) {
+							game.remove(movingShip);
 						}
 					} else {
-						if (Player.Player1.placeShip(this.movingShip.getLength(), 1, e.getX() / 60, (e.getY() - 100) / 60)) {
-							game.remove(this.movingShip);
+						if (Player.Player1.placeShip(movingShip.getLength(), 1, e.getX() / 60, (e.getY() - 100) / 60)) {
+							game.remove(movingShip);
 						}
 					}
 				} else {
-					this.movingShip.setVertical(false);
+					movingShip.setVertical(false);
 				}
-				this.movingShip.setVertical(false);
-				this.movingShip = null;
+				movingShip.setVertical(false);
+				movingShip = null;
 			}
 		}
 		game.repaint();
@@ -100,10 +100,10 @@ public final class DragAndDropListener extends MouseInputAdapter {
 	 * @see java.awt.event.MouseAdapter#mouseDragged(java.awt.event.MouseEvent) */
 	@Override
 	public void mouseDragged(final MouseEvent e) {
-		if (this.movingShip != null) {
-			this.location = this.movingShip.getLocation(this.location);
-			this.movingShip.setLocation((this.location.x - this.pressed.getX()) + e.getX(), (this.location.y - this.pressed.getY()) + e.getY());
-			this.pressed = e;
+		if (movingShip != null) {
+			location = movingShip.getLocation(location);
+			movingShip.setLocation(location.x - pressed.getX() + e.getX(), location.y - pressed.getY() + e.getY());
+			pressed = e;
 		}
 	}
 }

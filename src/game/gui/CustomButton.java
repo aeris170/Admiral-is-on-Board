@@ -22,10 +22,10 @@ public class CustomButton extends JButton {
 		g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		g2d.setStroke(GUIUtils.STROKE_1);
 		g2d.setColor(GUIUtils.LIGHTER_RED);
-		if(getModel().isRollover()) {
+		if (getModel().isRollover()) {
 			g2d.setColor(GUIUtils.LIGHT_RED);
 		}
-		if(getModel().isPressed()) {
+		if (getModel().isPressed()) {
 			g2d.setColor(GUIUtils.RED);
 		}
 		g2d.fillRect(0, 0, getWidth(), getHeight());

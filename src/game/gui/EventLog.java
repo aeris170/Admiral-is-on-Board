@@ -18,16 +18,16 @@ public final class EventLog extends JPanel {
 	private ColorPane cp;
 
 	public EventLog(final Point location, final Dimension size) {
-		this.cp = new ColorPane();
-		this.sp = new JScrollPane(this.cp, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		this.cp.setEditable(true);
-		this.cp.setFont(GUIUtils.GEORGIA_BOLD_16);
-		this.cp.setBackground(GUIUtils.DARK_BLUE);
-		this.sp.setBorder(null);
-		this.sp.setPreferredSize(new Dimension((int) (size.getWidth() - 10), (int) (size.getHeight() - 10)));
-		this.sp.getVerticalScrollBar().setUI(new ScrollBarUI());
+		cp = new ColorPane();
+		sp = new JScrollPane(cp, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		cp.setEditable(true);
+		cp.setFont(GUIUtils.GEORGIA_BOLD_16);
+		cp.setBackground(GUIUtils.DARK_BLUE);
+		sp.setBorder(null);
+		sp.setPreferredSize(new Dimension((int) (size.getWidth() - 10), (int) (size.getHeight() - 10)));
+		sp.getVerticalScrollBar().setUI(new ScrollBarUI());
 		super.setOpaque(false);
-		super.add(this.sp);
+		super.add(sp);
 		super.setLocation(location);
 		super.setSize(size);
 	}
@@ -37,17 +37,17 @@ public final class EventLog extends JPanel {
 		if (shouldScroll()) {
 			willScroll = true;
 		}
-		this.cp.append(c, s + "\n");
+		cp.append(c, s + "\n");
 		if (willScroll) {
-			final JScrollBar sb = this.sp.getVerticalScrollBar();
+			final JScrollBar sb = sp.getVerticalScrollBar();
 			sb.setValue(sb.getMaximum());
 		}
 		repaint();
 	}
 
 	public boolean shouldScroll() {
-		final int minimumValue = this.sp.getVerticalScrollBar().getValue() + this.sp.getVerticalScrollBar().getVisibleAmount();
-		final int maximumValue = this.sp.getVerticalScrollBar().getMaximum();
+		final int minimumValue = sp.getVerticalScrollBar().getValue() + sp.getVerticalScrollBar().getVisibleAmount();
+		final int maximumValue = sp.getVerticalScrollBar().getMaximum();
 		return maximumValue == minimumValue;
 	}
 

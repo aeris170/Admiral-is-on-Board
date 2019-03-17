@@ -31,14 +31,14 @@ public final class ReadyButton extends CustomButton {
 				} else if (game.getClientGUI() != null) {
 					game.getClientGUI().getClient().sendBoolean(true);
 				}
-				this.ready = true;
+				ready = true;
 				if (player.isReady() && enemy.isReady()) {
 					game.purgeReadyButton();
 					game.setGameState(Game.PLAYER_TURN);
 				}
 			}
 		});
-		this.ready = false;
+		ready = false;
 	}
 
 	@Override
@@ -53,13 +53,13 @@ public final class ReadyButton extends CustomButton {
 			g2d.setColor(GUIUtils.LIGHT_RED);
 		}
 		if (getModel().isPressed()) {
-			if (this.ready) {
+			if (ready) {
 				g2d.setColor(GUIUtils.GREEN);
 			} else {
 				g2d.setColor(GUIUtils.RED);
 			}
 		}
-		if (this.ready) {
+		if (ready) {
 			g2d.setColor(GUIUtils.GREEN);
 		}
 		g2d.fillRect(0, 0, getWidth(), getHeight());
